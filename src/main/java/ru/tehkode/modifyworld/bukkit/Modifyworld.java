@@ -31,6 +31,7 @@ import ru.tehkode.modifyworld.handlers.EntityListener;
 import ru.tehkode.modifyworld.handlers.PlayerListener;
 import ru.tehkode.modifyworld.handlers.VehicleListener;
 
+import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -132,8 +133,8 @@ public class Modifyworld extends JavaPlugin {
         if (load != null) {
             YamlConfiguration conf = new YamlConfiguration();
             conf.options().copyDefaults(true);
-            conf.load(load);
-            YamlConfiguration def = loadUnlocalized(path);
+			conf.load(new InputStreamReader(load));
+			YamlConfiguration def = loadUnlocalized(path);
             if (def != null) {
                 conf.setDefaults(def);
             }
@@ -146,8 +147,8 @@ public class Modifyworld extends JavaPlugin {
         InputStream load = getResource(path);
         if (load != null) {
             YamlConfiguration conf = new YamlConfiguration();
-            conf.load(load);
-            return conf;
+			conf.load(new InputStreamReader(load));
+			return conf;
         }
         return null;
     }
@@ -160,8 +161,8 @@ public class Modifyworld extends JavaPlugin {
         YamlConfiguration base = new YamlConfiguration();
         InputStream load =  getResource("lang/" + locale.toString() + "/" + path); // Country-specific
         if (load != null) {
-            base.load(load);
-            base.options().copyDefaults(true);
+			base.load(new InputStreamReader(load));
+			base.options().copyDefaults(true);
             YamlConfiguration def = loadBaseLanguage(path, locale);
             if (def == null) {
                 def = loadUnlocalized(path);
@@ -208,7 +209,7 @@ public class Modifyworld extends JavaPlugin {
 			InputStream defConfigStream = getLocalizedResource("config.yml");
 			if (defConfigStream != null) {
 				try {
-					this.config.load(defConfigStream);
+					this.config.load(new InputStreamReader(defConfigStream));
 				} catch (Exception de) {
 					this.getLogger().severe("Default config file is broken. Please tell this to Modifyworld author.");
 				}
@@ -219,7 +220,6 @@ public class Modifyworld extends JavaPlugin {
 
 		InputStream defConfigStream = getLocalizedResource("config.yml");
 		if (defConfigStream != null) {
-			this.config.setDefaults(YamlConfiguration.loadConfiguration(defConfigStream));
-		}
+			this.config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream)));		}
 	}
 }
